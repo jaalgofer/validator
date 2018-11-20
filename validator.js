@@ -8,7 +8,12 @@
                 IdInput:   ===> string del Id del input o del name del input radio
                 attr:      ===> array[] ==> validar los N° atributos que tiene ese elemento ( ["editvalue", "date-time"] ), 
                             ejemplo: <input type="text" id="txtFilas" data-minfila="2">
+                array:     ===> array[] ==> variable o array construido que sera puesto a validar
                 verificar: ===> string del tipo de metodo a verificar (DNI, Fecha, AlfaNum, etc..)
+                                        NOTA: en el caso de que se pase un array en el objeto se debe pasar en verificar una funcion con parametros a la vez que se debe retornar el resultado
+                                            ( function (elementoTarget,[index, arrayTarget] <== opcional) { return condicion a tomar } || (elementoTarget, [index, arrayTarget] <== opcional) => condicional )
+                                            ejemplo: barra => barra.IdBarra == 2 && barra.Borrado == false
+
                 mensaje:   ===> string Mensaje que se mostrara al no pasar la verificacion
             }
 	
@@ -38,22 +43,58 @@ const Validator = {
 
         for (let i = 0; i < _lengthArray; i++) {
 
+
             const _tipo = array[i].tipo,
-                _element = _tipo !== "radio" ? document.getElementById(array[i].IdInput) : "",
-                _value = _tipo !== "radio" ? _element.value : array[i].IdInput,
                 _verificar = array[i].verificar,
                 _mensaje = array[i].mensaje;
 
-            if (array[i].attr) {
+            if (_tipo == 'other') {
 
-                const arrayAttr = array[i].attr,
-                    attrLength = arrayAttr.length;
+                if (array[i].array !== undefined) {
 
-                for (let j = 0; attrLength > j; i++) {
+                    const _arrayTarget = array[i].array;
+                    const result = _arrayTarget.some(array[i].verificar);
 
-                    _value = _element.getAttribute(arrayAttr[j]);
+                    if (result) {
+                        alert(_mensaje);
+                        _return = false;
+                        break;
+                    }
+
+                }
+                else if (_verificar) {
+                    alert(_mensaje);
+                    if (array[i].IdInput != undefined || array[i].IdInput != null) document.getElementById(array[i].IdInput).focus();
+                    _return = false;
+                    break;
+                }
+
+            } else {
+
+                const _element = _tipo !== "radio" ? document.getElementById(array[i].IdInput) : "";
+                let _value = _tipo !== "radio" ? _element.value : array[i].IdInput;
+
+                if (array[i].attr) {
+
+                    const arrayAttr = array[i].attr,
+                        attrLength = arrayAttr.length;
+
+                    for (let j = 0; attrLength > j; i++) {
+
+                        _value = _element.getAttribute(arrayAttr[j]);
+
+                        if (this.regEx(_value, _verificar)) {
+                            alert(_mensaje);
+                            if (_tipo !== "radio") _element.focus();
+                            _return = false;
+                            break;
+                        }
+                    }
+
+                } else {
 
                     if (this.regEx(_value, _verificar)) {
+
                         alert(_mensaje);
                         if (_tipo !== "radio") _element.focus();
                         _return = false;
@@ -61,16 +102,8 @@ const Validator = {
                     }
                 }
 
-            } else {
-
-                if (this.regEx(_value, _verificar)) {
-
-                    alert(_mensaje);
-                    if (_tipo !== "radio") _element.focus();
-                    _return = false;
-                    break;
-                }
             }
+
 
         }
 
