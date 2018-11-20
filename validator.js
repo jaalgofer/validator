@@ -13,8 +13,8 @@
                                         NOTA: en el caso de que se pase un array en el objeto se debe pasar en verificar una funcion con parametros a la vez que se debe retornar el resultado
                                             ( function (elementoTarget,[index, arrayTarget] <== opcional) { return condicion a tomar } || (elementoTarget, [index, arrayTarget] <== opcional) => condicional )
                                             ejemplo: barra => barra.IdBarra == 2 && barra.Borrado == false
-
                 mensaje:   ===> string Mensaje que se mostrara al no pasar la verificacion
+                stop:      ===> boolean Parar el bucle al llegar a ese indexado si esta en true (opcional)
             }
 	
     regEx => params:
@@ -104,6 +104,7 @@ const Validator = {
 
             }
 
+            if (array[i].stop) break;
 
         }
 
