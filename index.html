@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Validator.js</title>
+</head>
+<body>
+    
+    <form action="">
+        <label for="txtNombre">Nombre</label><br>
+        <input type="text" id="txtNombre" placeholder="Ingrese su nombre"><br>
+        <label for="txtDNI">DNI</label><br>
+        <input type="text" id="txtDNI" placeholder="Ingrese su DNI"><br>
+        <label for="txtEmail">Correo</label><br>
+        <input type="text" id="txtEmail" placeholder="Ingrese su Correo Electronico"><br>
+        <label for="txtTelefono">Telefono</label><br>
+        <input type="text" id="txtTelefono" placeholder="Ingrese su Telefono"><br>
+        <label for="dtpFechaNacimiento">Ingrese su fecha de nacimiento</label><br>
+        <input type="date" id="dtpFechaNacimiento"><br>
+        <label>Sexo</label><br>
+        <input type="radio" name="sexo" id="rdMasculino" value="Masculino"><label for="rdMasculino">Masculino</label> 
+        <input type="radio" name="sexo" id="rdFemenino" value="Femenino"><label for="rdFemenino">Femenino</label> <br>
+        <label for="txtComentario">Comentario</label><br>
+        <textarea id="txtComentario" placeholder="Ingrese su Comentario"></textarea><br>
+
+        <input type="submit" value="Enviar">
+    </form>
+
+    <script src="validator.js"></script>
+    <script>
+    
+    function validarDatos(){
+
+        const array = [
+            {tipo: "text", IdInput: "txtNombre", verificar: "Alfa", mensaje: "Ingrese un nombre valido" },
+            {tipo: "text", IdInput: "txtDNI", verificar: "Num", mensaje: "Ingrese un DNI valido" },
+            {tipo: "text", IdInput: "txtEmail", verificar: "Email", mensaje: "Ingrese un Correo electronico valido" },
+            {tipo: "text", IdInput: "txtTelefono", verificar: "Mobil", mensaje: "Ingrese un Numero telefonico valido" },
+            {tipo: "dtp", IdInput: "dtpFechaNacimiento", verificar: "Fecha", mensaje: "Ingrese su fecha de nacimiento" },
+            {tipo: "radio", IdInput: "sexo", verificar: "radio", mensaje: "Seleccione su sexo" },
+            {tipo: "text", IdInput: "txtComentario", verificar: "Empty", mensaje: "Ingrese su comentario" },
+        ];
+
+        return Validator.verificar(array);
+
+    }
+
+    document.querySelector("form").addEventListener("submit", function(e){
+        e.preventDefault();
+        if(validarDatos()) alert("¡validacion completada!");
+    })
+        
+        
+    </script>
+
+</body>
+</html>
